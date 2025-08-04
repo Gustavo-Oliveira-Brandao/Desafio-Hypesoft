@@ -1,4 +1,7 @@
+using backend.Hypesoft.API.Extensions;
 using backend.Hypesoft.Infrastructure.Configurations;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,12 +13,25 @@ if (connectionString == null)
     throw new Exception("Connection string não encontrada!");
 }
 
+Log.Logger = new LoggerConfiguration().MinimumLevel.Information().MinimumLevel
+    .Override("Microsoft", LogEventLevel.Warning).MinimumLevel
+    .Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information).Enrich.FromLogContext().WriteTo.Console().WriteTo
+    .File("logs/log.txt", rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 builder.Services.AddInfrastructure(connectionString, "Hypesoft");
 
 Console.WriteLine(builder.Services);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 var app = builder.Build();
+
+app.UseCorrelationIdMiddleware();
+
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -36,4 +52,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+Log.Information("Aplicação iniciada!");
+
 app.Run();
+
+Log.CloseAndFlush();
