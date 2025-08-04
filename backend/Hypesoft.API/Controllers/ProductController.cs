@@ -36,14 +36,17 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
+    public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null, [FromQuery] string? categoryId = null, [FromQuery] bool lowStock = false)
     {
         try
         {
             var query = new GetAllProductsQuery
             {
                 PageIndex = pageIndex,
-                PageSize = pageSize
+                PageSize = pageSize,
+                SearchTerm = searchTerm,
+                CategoryId = categoryId,
+                LowStock = lowStock
             };
             var products = await _mediator.Send(query);
             return Ok(products);

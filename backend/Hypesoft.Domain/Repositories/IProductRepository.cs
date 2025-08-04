@@ -5,7 +5,7 @@ namespace backend.Hypesoft.Domain.Repositories
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize);
+        Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm, string? categoryId);
         Task<Product> GetProductById(string id);
         Task CreateProduct(Product product);
         Task UpdateProduct(Product product);

@@ -8,4 +8,7 @@ public class GetAllProductsQuery : IRequest<IEnumerable<Product>>
 {
     public int PageIndex { get; set; }
     public int PageSize { get; set; }
+    public string? SearchTerm { get; set; }
+    public string? CategoryId { get; set; }
+    public bool LowStock { get; set; }
 }

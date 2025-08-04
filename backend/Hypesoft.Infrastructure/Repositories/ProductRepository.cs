@@ -2,14 +2,34 @@
 using backend.Hypesoft.Domain.Repositories;
 using backend.Hypesoft.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace backend.Hypesoft.Infrastructure.Repositories;
 
 public class ProductRepository(MongoDbContext context) : IProductRepository
 {
-    public async Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize)
+    public async Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm = null, string? categoryId = null)
     {
-       var products = await context.Products.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        var query = context.Products.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()));
+        }
+
+        if (!string.IsNullOrEmpty(categoryId))
+        {
+            query = query.Where(p => p.CategoryId == categoryId);
+        }
+    
+        if (lowStock)
+        {
+            query = query.Where(p => p.StockQuantity < 10);
+        }
+        
+        var skipCount = (pageIndex - 1) * pageSize;
+        
+        var products = await query.OrderBy(p => p.Name).Skip(skipCount).Take(pageSize).ToListAsync();
        return products;
     }
 
