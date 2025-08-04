@@ -10,10 +10,10 @@ namespace backend.Hypesoft.Domain.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [StringLength(100, MinimumLength = 4)] 
+        [StringLength(100)] 
         public string Name { get; set; } = string.Empty;
         
-        [StringLength(1000, MinimumLength = 4)]
+        [StringLength(1000)]
         public string Description { get; set; } = string.Empty;
         
         public decimal Price { get; set; }
