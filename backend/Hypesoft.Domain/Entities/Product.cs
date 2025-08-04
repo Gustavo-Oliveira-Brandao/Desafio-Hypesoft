@@ -15,12 +15,18 @@ namespace backend.Hypesoft.Domain.Entities
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
+        
+        public string? CategoryId { get; set; }
 
-        public Product(string name, string description, decimal price, int stockQuantity)
+        public Product(string name, string description, decimal price, int stockQuantity, string? categoryId = null)
         {
             Id = ObjectId.GenerateNewId().ToString();
             UpdateDetails(name, description, price);
             UpdateStock(stockQuantity);
+            if (categoryId != null)
+            {
+                UpdateCategory(categoryId);
+            }
         }
 
         public void UpdateDetails(string name, string description, decimal price)
@@ -33,6 +39,11 @@ namespace backend.Hypesoft.Domain.Entities
         public void UpdateStock(int newStockQuantity)
         {
             StockQuantity = newStockQuantity;
+        }
+
+        public void UpdateCategory(string? newCategoryId)
+        {
+            CategoryId = newCategoryId;
         }
     }
 }

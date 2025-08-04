@@ -9,11 +9,15 @@ namespace backend.Hypesoft.Application.Handlers.Products
     public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
     {
       var productFound = await productRepository.GetProductById(request.Id);
+
+      if (productFound == null)
+      {
+        throw new ApplicationException("Produto não encontrado.");
+      }
       
-      productFound.Name = request.Name;
-      productFound.Description = request.Description;
-      productFound.Price = request.Price;
-      productFound.StockQuantity = request.StockQuantity;
+      productFound.UpdateDetails(request.Name, request.Description, request.Price);
+      productFound.UpdateStock(request.StockQuantity);
+      productFound.UpdateCategory(request.CategoryId);
       
       await productRepository.UpdateProduct(productFound);
       return Unit.Value;

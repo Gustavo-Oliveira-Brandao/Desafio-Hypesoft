@@ -9,7 +9,7 @@ namespace backend.Hypesoft.Application.Handlers.Products
   {
     public async Task<Unit> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-      var product = new Product(request.Name, request.Description, request.Price, request.StockQuantity);
+      var product = new Product(request.Name, request.Description, request.Price, request.StockQuantity, request.CategoryId);
 
       await productRepository.CreateProduct(product);
       
