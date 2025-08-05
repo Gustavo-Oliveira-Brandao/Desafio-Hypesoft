@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace backend.Hypesoft.API.Controllers;
 
 
-[Authorize(Roles = "app-admin")]
 [Route("api/[controller]")]
 [ApiController]
 public class ProductController : ControllerBase
