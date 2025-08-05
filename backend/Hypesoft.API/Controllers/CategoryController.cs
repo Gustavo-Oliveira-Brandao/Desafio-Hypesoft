@@ -2,10 +2,12 @@
 using backend.Hypesoft.Application.Queries.Categories;
 using backend.Hypesoft.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Hypesoft.API.Controllers;
 
+[Authorize(Roles = "app-admin")]
 [Route("api/[controller]")]
 [ApiController]
 public class CategoryController : ControllerBase

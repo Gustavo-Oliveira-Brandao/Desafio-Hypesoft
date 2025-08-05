@@ -22,10 +22,9 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Information().MinimumLevel
 
 builder.Host.UseSerilog();
 
-builder.Services.AddInfrastructure(connectionString, "Hypesoft");
+builder.Services.AddInfrastructure(connectionString, "Hypesoft", builder.Configuration);
 
 Console.WriteLine(builder.Services);
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 var app = builder.Build();
 
@@ -33,7 +32,6 @@ app.UseCorrelationIdMiddleware();
 
 app.UseSerilogRequestLogging();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -48,6 +46,7 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
