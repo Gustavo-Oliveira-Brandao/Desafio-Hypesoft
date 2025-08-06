@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Hypesoft.API.Controllers;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class CategoryController : ControllerBase

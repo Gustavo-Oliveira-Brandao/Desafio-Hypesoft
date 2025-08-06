@@ -22,7 +22,7 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Information().MinimumLevel
 
 builder.Host.UseSerilog();
 
-builder.Services.AddInfrastructure(connectionString, "Hypesoft");
+builder.Services.AddInfrastructure(connectionString, "Hypesoft", builder.Configuration);
 
 Console.WriteLine(builder.Services);
 
@@ -46,6 +46,7 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
