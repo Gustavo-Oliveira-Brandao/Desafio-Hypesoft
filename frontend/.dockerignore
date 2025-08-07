@@ -1,0 +1,24 @@
+# Pastas geradas pelo Next.js
+.next/
+
+# Dependências
+node_modules/
+
+# Arquivos de log e de cache
+npm-debug.log
+yarn-error.log
+
+# Arquivos de ambiente locais
+.env
+.env.local
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Git
+.git
+.gitignore
+
+# Outros arquivos de sistema operacional
+.DS_Store
