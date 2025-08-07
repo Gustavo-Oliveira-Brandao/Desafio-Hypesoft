@@ -38,6 +38,50 @@ public class ProductController : ControllerBase
         }
     }
 
+    [HttpGet("stockValue")]
+    public async Task<ActionResult<decimal>> GetTotalStockValue()
+    {
+        try
+        {
+            var query = new GetTotalStockValueQuery();
+            var totalStockValue = await _mediator.Send(query);
+            return Ok(totalStockValue);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("productsCategoryCount")]
+    public async Task<ActionResult<Dictionary<string, int>>> GetProductsCountByCategory() {
+        try
+        {
+            var query = new GetProductsCountByCategoryQuery();
+            var productsByCategoryCount = await _mediator.Send(query);
+            return Ok(productsByCategoryCount);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("productsCount")]
+    public async Task<ActionResult<int>> GetProductsCount()
+    {
+        try
+        {
+            var query = new GetProductsCountQuery();
+            var productsCount = await _mediator.Send(query);
+            return Ok(productsCount);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null, [FromQuery] string? categoryId = null, [FromQuery] bool lowStock = false)
     {

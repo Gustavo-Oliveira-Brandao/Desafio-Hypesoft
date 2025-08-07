@@ -8,6 +8,52 @@ namespace backend.Hypesoft.Infrastructure.Repositories;
 
 public class ProductRepository(MongoDbContext context) : IProductRepository
 {
+    public async Task<decimal> GetTotalStockValue()
+    {
+        decimal totalStockValue = await context.Products.SumAsync(p => p.Price * p.StockQuantity);
+        return totalStockValue;
+    }
+
+    public async Task<int> GetProductsCount()
+    {
+        int productsCount = await context.Products.CountAsync();
+        return productsCount;
+    }
+
+    public async Task<Dictionary<string, int>> GetProductsCountByCategory()
+    {
+        var productsByCategory = context.Products
+            .Where(p => p.CategoryId != null)
+            .Select(p => new { p.CategoryId });
+
+        var countsById = productsByCategory
+            .AsEnumerable()
+            .GroupBy(p => p.CategoryId)
+            .Select(group => new
+            {
+                CategoryId = group.Key,
+                ProductCount = group.Count()
+            })
+            .ToList();
+
+        var categoryIds = countsById.Select(x => x.CategoryId).ToList();
+
+        var categories = await context.Categories
+            .Where(c => categoryIds.Contains(c.Id))
+            .ToDictionaryAsync(c => c.Id, c => c.Name);
+
+        var result = new Dictionary<string, int>();
+        foreach (var product in countsById)
+        {
+            if (product.CategoryId != null && categories.TryGetValue(product.CategoryId, out var categoryName))
+            {
+                result[categoryName] = product.ProductCount;
+            }
+        }
+
+        return result;
+    }
+
     public async Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm = null, string? categoryId = null)
     {
         var query = context.Products.AsQueryable();
@@ -21,16 +67,16 @@ public class ProductRepository(MongoDbContext context) : IProductRepository
         {
             query = query.Where(p => p.CategoryId == categoryId);
         }
-    
+
         if (lowStock)
         {
             query = query.Where(p => p.StockQuantity < 10);
         }
-        
+
         var skipCount = (pageIndex - 1) * pageSize;
-        
+
         var products = await query.OrderBy(p => p.Name).Skip(skipCount).Take(pageSize).ToListAsync();
-       return products;
+        return products;
     }
 
     public async Task<Product> GetProductById(string productId)
