@@ -49,15 +49,15 @@ const HomePage = (): ReactElement => {
     isError: isLowStockError,
   } = useGetAllProductsQuery(
     {
-      pageIndex: 1,
+      pageIndex: currentPage,
       pageSize: 10,
       lowStock: true,
       searchTerm: "",
       categoryId: null,
     },
     session?.accessToken
-  );
-
+    );
+  
   if (
     status === "loading" ||
     isTotalStockLoading ||

@@ -39,7 +39,7 @@ const ProdutosPage = (): ReactElement => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["products"] });
-  }, [searchedProduct, selectedCategory, queryClient]);
+  }, [searchedProduct, selectedCategory, currentPage, queryClient]);
 
   const handleSearch = (newTerm: string) => {
     setSearchedProduct(newTerm);
