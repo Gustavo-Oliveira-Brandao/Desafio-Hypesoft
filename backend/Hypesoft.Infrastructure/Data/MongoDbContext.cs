@@ -14,6 +14,7 @@ namespace backend.Hypesoft.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Product>().ToCollection("products");
             modelBuilder.Entity<Category>().ToCollection("categories");
+    
         }
     }
 }

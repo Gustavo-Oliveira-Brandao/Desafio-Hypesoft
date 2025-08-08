@@ -38,16 +38,20 @@ export const ProductsByCategoryChart = (): ReactElement => {
   }
 
   const chartData = productsByCategory
-    ? Object.entries(productsByCategory).map(
-        ([categoryName, productsCount]) => ({
+    ? Object.entries(productsByCategory)
+        .map(([categoryName, productsCount]) => ({
           name: categoryName,
           products: productsCount,
-        })
-      )
+        }))
+        .sort((a, b) => b.products - a.products)
+        .slice(0, 5)
     : [];
 
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] max-h-[250px] w-full">
+    <ChartContainer
+      config={chartConfig}
+      className="min-h-[200px] max-h-[250px] w-full"
+    >
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis
@@ -60,7 +64,12 @@ export const ProductsByCategoryChart = (): ReactElement => {
           }
         />
         <ChartTooltip content={<ChartTooltipContent />} />
-        <Bar barSize={50} dataKey="products" fill="var(--color-products)" radius={8} />
+        <Bar
+          barSize={50}
+          dataKey="products"
+          fill="var(--color-products)"
+          radius={8}
+        />
       </BarChart>
     </ChartContainer>
   );

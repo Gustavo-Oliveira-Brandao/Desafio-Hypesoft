@@ -73,6 +73,7 @@ namespace backend.Hypesoft.Infrastructure.Configurations
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<DataSeeder>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddValidatorsFromAssembly(typeof(Program).Assembly);
             return services;

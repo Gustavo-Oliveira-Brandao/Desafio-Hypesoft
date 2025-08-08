@@ -16,6 +16,7 @@ import { useGetAllCategoriesQuery } from "@/hooks/queries/categories/useGetAllCa
 import { useGetAllProductsQuery } from "@/hooks/queries/products/useGetAllProductsQuery";
 import { useGetProductsCountQuery } from "@/hooks/queries/products/useGetProductsCountQuery";
 import { useGetTotalStockValueQuery } from "@/hooks/queries/products/useGetTotalStockValueQuery";
+import { formatCurrency } from "@/utils/currencyFormatter";
 import { useSession } from "next-auth/react";
 import { ReactElement, useState } from "react";
 
@@ -115,13 +116,13 @@ const HomePage = (): ReactElement => {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 w-full sm:w-[230px]">
+        <Card className="bg-zinc-900 w-full md:w-fit">
           <CardHeader>
             <CardTitle>Valor total do estoque</CardTitle>
           </CardHeader>
 
           <CardContent>
-            <p className="text-4xl">R$ {String(totalStockValue) ?? "0"}</p>
+            <p className="text-4xl">{formatCurrency(totalStockValue ?? 0)}</p>
           </CardContent>
         </Card>
       </div>

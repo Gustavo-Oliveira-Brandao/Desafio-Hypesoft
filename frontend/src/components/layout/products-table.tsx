@@ -20,6 +20,7 @@ import {
 } from "../ui/pagination";
 import { useGetAllCategoriesQuery } from "@/hooks/queries/categories/useGetAllCategoriesQuery";
 import { useSession } from "next-auth/react";
+import { formatCurrency } from "@/utils/currencyFormatter";
 
 type ProductsTableProps = {
   products: IProduct[];
@@ -61,7 +62,7 @@ export const ProductsTable = ({
                 <TableCell>{product.name}</TableCell>
 
                 <TableCell className="hidden md:table-cell">
-                  R$ {String(product.price)}
+                  {formatCurrency(product.price)}
                 </TableCell>
 
                 <TableCell className="hidden md:table-cell">
