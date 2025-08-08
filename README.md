@@ -64,6 +64,19 @@ cd hypesoft-challenge
 docker-compose up -d --build
 ```
 
+### Portas de Acesso
+
+* **Frontend**: `3000:3000`
+    * Acessível em `http://localhost:3000`
+* **Backend**: `5000:8080`
+    * Acessível em `http://localhost:5000`
+* **Keycloak**: `8080:8080`
+    * Acessível em `http://localhost:8080`
+* **MongoDB**: `27017:27017`
+    * Acessível apenas internamente pelos containers.
+* **MongoDB Express**: `8081:8081`
+    * Acessível em `http://localhost:8081`
+
 ## Problemas Conhecidos
 
 * **Problema de Inicialização do Keycloak**: O Keycloak pode, ocasionalmente, levar alguns segundos para iniciar completamente, pois precisa atualizar suas dependências. Durante esse período, pode ocorrer um erro temporário no login do frontend. A solução é **aguardar alguns instantes** e tentar novamente.
