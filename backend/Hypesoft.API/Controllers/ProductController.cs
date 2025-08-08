@@ -1,4 +1,5 @@
 ﻿using backend.Hypesoft.Application.Commands.Products;
+using backend.Hypesoft.Application.DTOs;
 using backend.Hypesoft.Application.Queries.Products;
 using backend.Hypesoft.Domain.Entities;
 using MediatR;
@@ -54,7 +55,8 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("productsCategoryCount")]
-    public async Task<ActionResult<Dictionary<string, int>>> GetProductsCountByCategory() {
+    public async Task<ActionResult<Dictionary<string, int>>> GetProductsCountByCategory()
+    {
         try
         {
             var query = new GetProductsCountByCategoryQuery();
@@ -82,8 +84,8 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null, [FromQuery] string? categoryId = null, [FromQuery] bool lowStock = false)
+    [HttpGet("all")]
+    public async Task<ActionResult<PaginatedProductsResponse>> GetAllProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10, [FromQuery] string? searchTerm = null, [FromQuery] string? categoryId = null, [FromQuery] bool lowStock = false)
     {
         try
         {
@@ -95,8 +97,18 @@ public class ProductController : ControllerBase
                 CategoryId = categoryId,
                 LowStock = lowStock
             };
-            var products = await _mediator.Send(query);
-            return Ok(products);
+            var (products, totalCount) = await _mediator.Send(query);
+
+            var totalPages = pageSize > 0 ? (int)Math.Ceiling((double)totalCount / pageSize) : 0;
+
+            var response = new PaginatedProductsResponse
+            {
+                Products = products,
+
+                TotalPages = totalPages
+            };
+
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -104,7 +116,7 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
     {
         try
@@ -118,7 +130,7 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpPut]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductCommand command)
     {
         try
@@ -132,7 +144,7 @@ public class ProductController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteProduct([FromRoute] string id)
     {
         try

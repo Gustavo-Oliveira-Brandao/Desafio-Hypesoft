@@ -54,7 +54,7 @@ public class ProductRepository(MongoDbContext context) : IProductRepository
         return result;
     }
 
-    public async Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm = null, string? categoryId = null)
+    public async Task<(IEnumerable<Product> products, int totalCount)> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm = null, string? categoryId = null)
     {
         var query = context.Products.AsQueryable();
 
@@ -73,10 +73,12 @@ public class ProductRepository(MongoDbContext context) : IProductRepository
             query = query.Where(p => p.StockQuantity < 10);
         }
 
+        int totalCount = await query.CountAsync();
+
         var skipCount = (pageIndex - 1) * pageSize;
 
         var products = await query.OrderBy(p => p.Name).Skip(skipCount).Take(pageSize).ToListAsync();
-        return products;
+        return (products, totalCount);
     }
 
     public async Task<Product> GetProductById(string productId)

@@ -16,6 +16,14 @@ namespace backend.Hypesoft.Infrastructure.Configurations
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, string mongoDbConnectionString, string databaseName, IConfiguration configuration)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "cors", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
             services.AddSwaggerGen(options =>
             {
 

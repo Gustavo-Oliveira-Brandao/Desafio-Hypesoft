@@ -5,11 +5,11 @@ using MediatR;
 
 namespace backend.Hypesoft.Application.Handlers.Products;
 
-public class GetAllProductsQueryHandler(IProductRepository productRepository) : IRequestHandler<GetAllProductsQuery, IEnumerable<Product>>
+public class GetAllProductsQueryHandler(IProductRepository productRepository) : IRequestHandler<GetAllProductsQuery, (IEnumerable<Product> products, int totalCount)>
 {
-    public async Task<IEnumerable<Product>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+    public async Task<(IEnumerable<Product> products, int totalCount)> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await productRepository.GetAllProducts(request.PageIndex, request.PageSize, request.LowStock, request.SearchTerm, request.CategoryId);
-        return products;
-    }    
+        var (products, totalCount) = await productRepository.GetAllProducts(request.PageIndex, request.PageSize, request.LowStock, request.SearchTerm, request.CategoryId);
+        return (products, totalCount);
+    }
 }

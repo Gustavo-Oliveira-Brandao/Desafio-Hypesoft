@@ -7,7 +7,7 @@ namespace backend.Hypesoft.Domain.Repositories
         Task<decimal> GetTotalStockValue();
         Task<int> GetProductsCount();
         Task<Dictionary<string, int>> GetProductsCountByCategory();
-        Task<IEnumerable<Product>> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm, string? categoryId);
+        Task<(IEnumerable<Product> products, int totalCount)> GetAllProducts(int pageIndex, int pageSize, bool lowStock, string? searchTerm, string? categoryId);
         Task<Product> GetProductById(string id);
         Task CreateProduct(Product product);
         Task UpdateProduct(Product product);

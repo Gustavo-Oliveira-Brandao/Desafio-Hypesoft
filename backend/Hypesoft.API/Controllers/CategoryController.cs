@@ -52,7 +52,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryCommand command)
     {
         try
@@ -66,7 +66,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpPut]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryCommand command)
     {
         try
@@ -80,7 +80,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] string id)
     {
         try
